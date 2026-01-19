@@ -18,7 +18,9 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDark ? AppColors.white : AppColors.brandHoverColor;
+    final backgroundColor = isDark
+        ? AppColors.primaryText
+        : AppColors.brandHoverColor;
 
     return Material(
       color: backgroundColor,
@@ -29,9 +31,7 @@ class CustomButton extends StatelessWidget {
           height: 48,
           width: double.infinity,
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
           child: buildChild(context),
         ),
       ),
@@ -40,7 +40,7 @@ class CustomButton extends StatelessWidget {
 
   Widget buildChild(BuildContext context) {
     if (isLoading) {
-      return const LoadingWidget(color: AppColors.white,);
+      return const LoadingWidget(color: AppColors.white);
     } else {
       return Text(
         text,

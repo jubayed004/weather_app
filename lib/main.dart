@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         routeInformationProvider: AppRouter.route.routeInformationProvider,
 
         //Theme Section
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.dark,
         //theme: lightTheme,
         darkTheme: darkTheme,
 

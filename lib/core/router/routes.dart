@@ -1,29 +1,120 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/core/router/route_path.dart';
-import 'package:weather_app/features/splash/splash_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/active_otp_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/forget_otp_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/sign_up_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/login_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/forget_password_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/reset_password_screen.dart';
+import 'package:weather_app/features/auth/presentation/screen/welcome_back_screen.dart';
+import 'package:weather_app/features/home/presentation/screen/home_screen.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
 
 class AppRouter {
-  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final GlobalKey<NavigatorState> navigatorKey =
+      GlobalKey<NavigatorState>();
 
   static final GoRouter initRoute = GoRouter(
-    initialLocation: RoutePath.splashScreen.addBasePath,
+    initialLocation: RoutePath.loginScreen.addBasePath,
     debugLogDiagnostics: true,
     navigatorKey: navigatorKey,
     routes: [
       ///======================= Initial Route =======================
+      // GoRoute(
+      //   name: RoutePath.splashScreen,
+      //   path: RoutePath.splashScreen.addBasePath,
+      //   pageBuilder: (context, state) {
+      //     return _buildPageWithAnimation(
+      //       child: const SplashScreen(),
+      //       state: state,
+      //     );
+      //   },
+      // ),
       GoRoute(
-        name: RoutePath.splashScreen,
-        path: RoutePath.splashScreen.addBasePath,
+        name: RoutePath.signUpScreen,
+        path: RoutePath.signUpScreen.addBasePath,
         pageBuilder: (context, state) {
           return _buildPageWithAnimation(
-            child: const SplashScreen(),
+            child: const SignUpScreen(),
             state: state,
           );
         },
       ),
 
+      GoRoute(
+        name: RoutePath.loginScreen,
+        path: RoutePath.loginScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const LoginScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.activeOtpScreen,
+        path: RoutePath.activeOtpScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ActiveOtpScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.forgetPasswordScreen,
+        path: RoutePath.forgetPasswordScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ForgetPasswordScreen(),
+            state: state,
+          );
+        },
+      ),
+
+      GoRoute(
+        name: RoutePath.forgetOtpScreen,
+        path: RoutePath.forgetOtpScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ForgetOtpScreen(),
+            state: state,
+          );
+        },
+      ),
+
+      GoRoute(
+        name: RoutePath.resetPasswordScreen,
+        path: RoutePath.resetPasswordScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ResetPasswordScreen(),
+            state: state,
+          );
+        },
+      ),
+
+      GoRoute(
+        name: RoutePath.welcomeBackScreen,
+        path: RoutePath.welcomeBackScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const WelcomeBackScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.homeScreen,
+        path: RoutePath.homeScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const HomeScreen(),
+            state: state,
+          );
+        },
+      ),
       /*GoRoute(
         name: RoutePath.categoryEventsScreen,
         path: RoutePath.categoryEventsScreen.addBasePath,

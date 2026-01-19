@@ -23,7 +23,8 @@ class AppStrings {
   static const String resendOtp = "resend_otp";
 
   static const String forgotPasswordTitle = "forgot_password_title";
-  static const String sendVerificationCodeInfo = "send_verification_code_info";
+  static const String sendVerificationCodeMessage =
+      "send_verification_code_message";
   static const String sendConfirmation = "send_confirmation";
 
   static const String createNewPassword = "create_new_password";
