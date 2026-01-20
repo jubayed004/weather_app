@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:weather_app/helper/date_converter/date_converter.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/dropdown/custom_dropdown_field.dart';
+import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
@@ -19,12 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
   // Mock Data
   final List<String> states = ['California', 'Texas', 'Florida', 'New York'];
   final List<String> counties = ['County A', 'County B', 'County C'];
-  final List<String> observationDates = ['Last 7 Days', 'Last Month', 'Custom'];
 
   final ValueNotifier<String?> selectedState = ValueNotifier<String?>(null);
   final ValueNotifier<String?> selectedCounty = ValueNotifier<String?>(null);
   final ValueNotifier<String?> selectedDate = ValueNotifier<String?>(null);
   final TextEditingController _fipsController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   void dispose() {
@@ -33,6 +36,37 @@ class _HomeScreenState extends State<HomeScreen> {
     selectedCounty.dispose();
     selectedDate.dispose();
     super.dispose();
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2101),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.dark(
+              primary: AppColors.successColor,
+              onPrimary: Colors.white,
+              surface: AppColors.darkSurface,
+              onSurface: Colors.white,
+            ),
+            dialogBackgroundColor: AppColors.darkSurface,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      setState(() {
+        _dateController.text = DateConverter.formatDate(
+          dateTime: picked,
+          format: 'yyyy-MM-dd',
+        );
+      });
+    }
   }
 
   @override
@@ -102,60 +136,79 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     Gap(16.h),
+                    // ValueListenableBuilder<String?>(
+                    //   valueListenable: selectedDate,
+                    //   builder: (context, value, child) {
+                    //     return CustomDropdownField<String>(
+                    //       hintText: "Observation Date",
+                    //       items: observationDates,
+                    //       value: value,
+                    //       onChanged: (newValue) {
+                    //         selectedDate.value = newValue;
+                    //       },
+                    //       fillColor: AppColors.darkBackground,
+                    //       labelBuilder: (item) => item,
+                    //     );
+                    //   },
+                    // ),
+                    CustomTextField(
+                      controller: _dateController,
+                      hintText: "Observation Date",
+                      fillColor: AppColors.darkBackground,
+                      readOnly: true,
+                      onTap: () => _selectDate(context),
+                      suffixIcon: const Icon(
+                        Icons.calendar_today_outlined,
+                        color: AppColors.white,
+                        size: 20,
+                      ),
+                    ),
+                    Gap(16.h),
 
-                    /// ---------- ROW: DATE & FIPS ----------
-                    Row(
-                      children: [
-                        // Observation Date
-                        Expanded(
-                          flex: 3,
-                          child: ValueListenableBuilder<String?>(
-                            valueListenable: selectedDate,
-                            builder: (context, value, child) {
-                              return CustomDropdownField<String>(
-                                hintText: "Observation Date",
-                                items: observationDates,
-                                value: value,
-                                onChanged: (newValue) {
-                                  selectedDate.value = newValue;
-                                },
-                                fillColor: AppColors.darkBackground,
-                                labelBuilder: (item) => item,
-                              );
-                            },
-                          ),
-                        ),
-                        Gap(12.w),
-                        // FIPS ID
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 54.h,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            decoration: BoxDecoration(
-                              color: AppColors.darkBackground,
-                              borderRadius: BorderRadius.circular(15),
-                              border: Border.all(
-                                color: AppColors.brandHoverColor,
-                                width: 1.2,
-                              ),
-                            ),
-                            child: TextField(
-                              controller: _fipsController,
-                              style: const TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
-                                hintText: AppStrings.fipsId.tr,
-                                hintStyle: const TextStyle(
-                                  color: AppColors.brandHoverColor,
-                                  fontSize: 14,
-                                ),
-                                border: InputBorder.none,
-                                contentPadding: EdgeInsets.only(bottom: 8.h),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                    /// ---------- DATE & FIPS ----------
+                    // Row(
+                    //   children: [
+                    //     // Observation Date
+                    //     // Expanded(
+                    //     //   flex: 3,
+                    //     //   child:
+                    //     // ),
+                    //     Gap(12.w),
+                    //     // FIPS ID
+                    //     Expanded(
+                    //       child: Container(
+                    //         height: 54.h,
+                    //         padding: const EdgeInsets.symmetric(horizontal: 12),
+                    //         decoration: BoxDecoration(
+                    //           color: AppColors.darkBackground,
+                    //           borderRadius: BorderRadius.circular(15),
+                    //           border: Border.all(
+                    //             color: AppColors.brandHoverColor,
+                    //             width: 1.2,
+                    //           ),
+                    //         ),
+                    //         child: TextField(
+                    //           controller: _fipsController,
+                    //           style: const TextStyle(color: Colors.white),
+                    //           decoration: InputDecoration(
+                    //             hintText: AppStrings.fipsId.tr,
+                    //             hintStyle: const TextStyle(
+                    //               color: AppColors.brandHoverColor,
+                    //               fontSize: 14,
+                    //             ),
+                    //             border: InputBorder.none,
+                    //             contentPadding: EdgeInsets.only(bottom: 8.h),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    CustomTextField(
+                      controller: _fipsController,
+                      hintText: AppStrings.fipsId.tr,
+
+                      fillColor: AppColors.darkBackground,
                     ),
                     Gap(24.h),
 
