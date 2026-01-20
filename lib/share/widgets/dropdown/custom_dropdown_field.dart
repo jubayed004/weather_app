@@ -61,7 +61,7 @@ class CustomDropdownField<T> extends StatelessWidget {
       ),
       hint: Text(
         hintText,
-        style: const TextStyle(color: AppColors.brandHoverColor, fontSize: 14),
+        style: const TextStyle(color: AppColors.white, fontSize: 14),
       ),
       items: items
           .map(
@@ -70,7 +70,7 @@ class CustomDropdownField<T> extends StatelessWidget {
               child: Text(
                 labelBuilder?.call(item) ?? item.toString(),
                 style: const TextStyle(
-                  color: AppColors.brandHoverColor,
+                  color: AppColors.white,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                 ),
@@ -81,7 +81,8 @@ class CustomDropdownField<T> extends StatelessWidget {
       onChanged: enabled ? onChanged : null,
       validator: validationFunction,
       style: const TextStyle(
-        color: AppColors.brandHoverColor,
+        backgroundColor: AppColors.darkBackground,
+        color: AppColors.white,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
@@ -89,17 +90,17 @@ class CustomDropdownField<T> extends StatelessWidget {
         padding: EdgeInsets.only(right: 8),
       ),
       iconStyleData: const IconStyleData(
-        icon: Icon(Icons.keyboard_arrow_down, color: AppColors.brandHoverColor),
+        icon: Icon(Icons.keyboard_arrow_down, color: AppColors.white),
         iconSize: 24,
       ),
       dropdownStyleData: DropdownStyleData(
         maxHeight: 300,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: AppColors.white,
+          color: AppColors.darkBackground,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: .05),
               blurRadius: 8,
               offset: const Offset(0, 4),
             ),

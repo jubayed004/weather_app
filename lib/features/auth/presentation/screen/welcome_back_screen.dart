@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:weather_app/core/custom_assets/assets.gen.dart';
 import 'package:weather_app/core/router/route_path.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';

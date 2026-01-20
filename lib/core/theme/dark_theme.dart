@@ -34,11 +34,11 @@ final ThemeData darkTheme = ThemeData(
   ),
   outlinedButtonTheme: OutlinedButtonThemeData(
     style: OutlinedButton.styleFrom(
-      side: const BorderSide(color: AppColors.darkPrimary, width: 1.5),
+      side: const BorderSide(color: AppColors.borderColor, width: 1.5),
       foregroundColor: AppColors.darkPrimary,
       minimumSize: const Size(186, 48),
       padding: const EdgeInsets.all(10),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       textStyle: const TextStyle(
         fontFamily: AppConfig.fontFamily,
         fontSize: 16,

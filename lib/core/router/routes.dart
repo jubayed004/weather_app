@@ -9,6 +9,9 @@ import 'package:weather_app/features/auth/presentation/screen/forget_password_sc
 import 'package:weather_app/features/auth/presentation/screen/reset_password_screen.dart';
 import 'package:weather_app/features/auth/presentation/screen/welcome_back_screen.dart';
 import 'package:weather_app/features/home/presentation/screen/home_screen.dart';
+import 'package:weather_app/features/result/presentation/screen/result_screen.dart';
+import 'package:weather_app/features/result_summary/presentation/screen/result_summary.dart';
+import 'package:weather_app/features/save/presentation/screen/save_screen.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
 
 class AppRouter {
@@ -115,6 +118,37 @@ class AppRouter {
           );
         },
       ),
+      GoRoute(
+        name: RoutePath.resultScreen,
+        path: RoutePath.resultScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ResultScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.resultSummaryScreen,
+        path: RoutePath.resultSummaryScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ResultSummaryScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.saveScreen,
+        path: RoutePath.saveScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const SaveScreen(),
+            state: state,
+          );
+        },
+      ),
+
       /*GoRoute(
         name: RoutePath.categoryEventsScreen,
         path: RoutePath.categoryEventsScreen.addBasePath,

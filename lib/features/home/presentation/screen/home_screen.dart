@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/core/router/route_path.dart';
 import 'package:weather_app/helper/date_converter/date_converter.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/dropdown/custom_dropdown_field.dart';
@@ -217,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: AppStrings.search.tr,
                       isLoading: false,
                       onTap: () {
-                        // Implement Search Logic
+                        context.pushNamed(RoutePath.resultScreen);
                       },
                     ),
                   ],
