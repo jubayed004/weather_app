@@ -9,6 +9,13 @@ import 'package:weather_app/features/auth/presentation/screen/forget_password_sc
 import 'package:weather_app/features/auth/presentation/screen/reset_password_screen.dart';
 import 'package:weather_app/features/auth/presentation/screen/welcome_back_screen.dart';
 import 'package:weather_app/features/home/presentation/screen/home_screen.dart';
+import 'package:weather_app/features/other/presentation/screen/change_password_screen.dart';
+import 'package:weather_app/features/other/presentation/screen/contact_and_support.dart';
+import 'package:weather_app/features/other/presentation/screen/privacy_policy_screen.dart';
+import 'package:weather_app/features/other/presentation/screen/setting_screen.dart';
+import 'package:weather_app/features/other/presentation/screen/terms_and_condition_screen.dart';
+import 'package:weather_app/features/profile/presentation/screen/edit_profile_screen.dart';
+import 'package:weather_app/features/profile/presentation/screen/profile_screen.dart';
 import 'package:weather_app/features/result/presentation/screen/result_screen.dart';
 import 'package:weather_app/features/result_summary/presentation/screen/result_summary.dart';
 import 'package:weather_app/features/save/presentation/screen/save_screen.dart';
@@ -144,6 +151,76 @@ class AppRouter {
         pageBuilder: (context, state) {
           return _buildPageWithAnimation(
             child: const SaveScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.profileScreen,
+        path: RoutePath.profileScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ProfileScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.editProfileScreen,
+        path: RoutePath.editProfileScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const EditProfileScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.settingScreen,
+        path: RoutePath.settingScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const SettingScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.changePasswordScreen,
+        path: RoutePath.changePasswordScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ChangePasswordScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.contactSupportScreen,
+        path: RoutePath.contactSupportScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const ContactAndSupportScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.termsAndConditionScreen,
+        path: RoutePath.termsAndConditionScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const TermsAndConditionScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        name: RoutePath.privacyPolicyScreen,
+        path: RoutePath.privacyPolicyScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const PrivacyPolicyScreen(),
             state: state,
           );
         },

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:weather_app/core/custom_assets/assets.gen.dart';
+import 'package:weather_app/core/router/route_path.dart';
 import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/otp_text_field.dart';
@@ -91,10 +93,11 @@ class _ActiveOtpScreenState extends State<ActiveOtpScreen> {
                   text: AppStrings.continueText.tr,
                   isLoading: false,
                   onTap: () {
-                    if (_formKey.currentState!.validate()) {
-                      // TODO: Implement Verification Logic
-                      print("OTP Verified: ${verifyOtp.text}");
-                    }
+                    // if (_formKey.currentState!.validate()) {
+                    //   // TODO: Implement Verification Logic
+                    //   print("OTP Verified: ${verifyOtp.text}");
+                    // }
+                    context.goNamed(RoutePath.homeScreen);
                   },
                 ),
                 Gap(28.h),

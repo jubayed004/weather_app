@@ -14,4 +14,11 @@ class RoutePath {
   static const String resultScreen = 'resultScreen';
   static const String resultSummaryScreen = 'resultSummaryScreen';
   static const String saveScreen = 'saveScreen';
+  static const String profileScreen = 'profileScreen';
+  static const String editProfileScreen = 'editProfileScreen';
+  static const String settingScreen = 'settingScreen';
+  static const String changePasswordScreen = 'changePasswordScreen';
+  static const String contactSupportScreen = 'contactSupportScreen';
+  static const String termsAndConditionScreen = 'termsAndConditionScreen';
+  static const String privacyPolicyScreen = 'privacyPolicyScreen';
 }

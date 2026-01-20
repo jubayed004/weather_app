@@ -6,14 +6,15 @@ import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/enum/app_enum.dart';
 
-class PrivacyPolicyScreen extends StatefulWidget {
-  const PrivacyPolicyScreen({super.key});
+class TermsAndConditionScreen extends StatefulWidget {
+  const TermsAndConditionScreen({super.key});
 
   @override
-  State<PrivacyPolicyScreen> createState() => _PrivacyPolicyScreenState();
+  State<TermsAndConditionScreen> createState() =>
+      _TermsAndConditionScreenState();
 }
 
-class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
+class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
   final controller = Get.find<OtherController>();
 
   @override
@@ -25,11 +26,9 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
-        title: Text(AppStrings.privacyPolicy.tr),
+        title: Text(AppStrings.termsCondition.tr),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -45,7 +44,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
 
           case ApiStatus.completed:
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

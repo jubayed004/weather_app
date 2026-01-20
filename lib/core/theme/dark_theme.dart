@@ -12,7 +12,7 @@ final ThemeData darkTheme = ThemeData(
     centerTitle: true,
     iconTheme: IconThemeData(color: AppColors.darkPrimary),
     titleTextStyle: TextStyle(
-      color: AppColors.darkText,
+      color: AppColors.white,
       fontFamily: AppConfig.fontFamily,
       fontSize: 18,
       fontWeight: FontWeight.w600,

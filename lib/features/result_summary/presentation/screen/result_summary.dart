@@ -19,33 +19,9 @@ class ResultSummaryScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: GestureDetector(
-          onTap: () {
-            context.pop();
-          },
-          child: Container(
-            margin: EdgeInsets.only(left: 20.w, top: 10.h, bottom: 10.h),
-            decoration: const BoxDecoration(
-              color: Color(0xFF1C1C1E), // Dark circle
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Colors.white,
-              size: 20,
-            ),
-          ),
-        ),
+        scrolledUnderElevation: 0,
+        title: Text(AppStrings.resultSummary.tr),
         centerTitle: true,
-        title: Text(
-          AppStrings.resultSummary.tr,
-          style: context.headlineMedium.copyWith(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),

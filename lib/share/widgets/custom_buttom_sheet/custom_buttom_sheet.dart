@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:delivery_app/core/custom_assets/assets.gen.dart';
-import 'package:delivery_app/core/router/routes.dart';
-import 'package:delivery_app/share/widgets/button/custom_button.dart';
-import 'package:delivery_app/utils/color/app_colors.dart';
-import 'package:delivery_app/utils/extension/base_extension.dart';
+import 'package:weather_app/core/custom_assets/assets.gen.dart';
+import 'package:weather_app/core/router/routes.dart';
+import 'package:weather_app/share/widgets/button/custom_button.dart';
+import 'package:weather_app/utils/color/app_colors.dart';
+import 'package:weather_app/utils/extension/base_extension.dart';
+
 
 Widget makeDismissable({required Widget child}) => GestureDetector(
   behavior: HitTestBehavior.opaque,
@@ -55,7 +56,7 @@ class ConfirmationModalBottomSheet extends StatelessWidget {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final primaryTextColor = isDarkMode
         ? AppColors.white
-        : AppColors.blackMainTextColor;
+        : AppColors.black;
 
     return makeDismissable(
       child: DraggableScrollableSheet(
@@ -88,7 +89,7 @@ class ConfirmationModalBottomSheet extends StatelessWidget {
                   Text(
                     message,
                     style: context.bodyMedium.copyWith(
-                      color: AppColors.grayTextSecondaryColor,
+                      color: AppColors.white,
                       height: 1.5,
                     ),
                     textAlign: TextAlign.center,

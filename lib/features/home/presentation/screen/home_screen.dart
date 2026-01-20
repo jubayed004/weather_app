@@ -80,6 +80,15 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  icon: const Icon(Icons.person, color: Colors.white),
+                  onPressed: () {
+                    context.pushNamed(RoutePath.profileScreen);
+                  },
+                ),
+              ),
               Gap(20.h),
 
               /// ---------- HEADER ----------

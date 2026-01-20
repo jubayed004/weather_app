@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:weather_app/features/auth/controller/auth_controller.dart';
+import 'package:weather_app/features/other/controller/other_controller.dart';
 import 'package:weather_app/share/controller/language_controller.dart';
 
 void initGetx() {
@@ -10,7 +11,7 @@ void initGetx() {
   // Get.lazyPut(() => ResetPasswordController(), fenix: true);
   //
   // //Others
-  // Get.lazyPut(() => OtherController(), fenix: true);
+  Get.lazyPut(() => OtherController(), fenix: true);
   // Get.lazyPut(() => OnboardingController(), fenix: true);
   // Get.lazyPut(() => CommonController(), fenix: true);
   //
