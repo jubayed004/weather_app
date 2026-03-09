@@ -100,10 +100,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
       builder: (context, obscureText, _) {
         return Column(
           children: [
-            if(widget.title != null)
-              CustomAlignText(text: widget.title ?? ""),
-            if(widget.title != null)
-              const Gap(8),
+            if (widget.title != null) CustomAlignText(text: widget.title ?? ""),
+            if (widget.title != null) const Gap(8),
             TextFormField(
               onTap: widget.onTap,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -125,7 +123,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
               validator: widget.validator,
               decoration: InputDecoration(
                 fillColor: widget.fillColor,
-                contentPadding: widget.contentPadding ?? const EdgeInsets.symmetric(horizontal: 12),
+                contentPadding:
+                    widget.contentPadding ??
+                    const EdgeInsets.symmetric(horizontal: 12),
                 isCollapsed: widget.isCollapsed,
                 isDense: widget.isDense,
                 errorMaxLines: 2,
@@ -134,14 +134,28 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 prefixIcon: widget.prefixIcon,
                 prefix: widget.prefix,
                 suffix: widget.suffix,
-                suffixIcon: widget.isPassword ? GestureDetector(
-                  onTap: toggle,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-                    child: obscureText ? const Icon(Icons.visibility_off_outlined, color: AppColors.brandHoverColor,) :
-                    const Icon(Icons.visibility_outlined, color: AppColors.brandHoverColor,),
-                  ),
-                ) : widget.suffixIcon,
+                suffixIcon: widget.isPassword
+                    ? GestureDetector(
+                        onTap: toggle,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 10,
+                            right: 10,
+                            top: 10,
+                            bottom: 10,
+                          ),
+                          child: obscureText
+                              ? const Icon(
+                                  Icons.visibility_off_outlined,
+                                  color: AppColors.white,
+                                )
+                              : const Icon(
+                                  Icons.visibility_outlined,
+                                  color: AppColors.white,
+                                ),
+                        ),
+                      )
+                    : widget.suffixIcon,
                 suffixIconColor: widget.suffixIconColor,
                 border: widget.border,
                 focusedBorder: widget.focusedBorder,

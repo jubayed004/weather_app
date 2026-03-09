@@ -5,12 +5,16 @@ import 'package:get/get.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/features/home/controller/home_controller.dart';
 
 class RainfallRecordWidget extends StatelessWidget {
   const RainfallRecordWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final resultData = Get.find<HomeController>().resultSummaryModel.value.data;
+    final records = resultData?.rainfallRecord ?? [];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -43,37 +47,28 @@ class RainfallRecordWidget extends StatelessWidget {
         ),
         Gap(8.h),
         // Rows
-        _buildRow(
-          context,
-          month: "March",
-          less30: "2.04",
-          avg: "4.48",
-          more30: "5.26",
-          rainfall: "5",
-          statusColor: AppColors.wefColor, // Wet
-        ),
-        Gap(12.h),
-        _buildRow(
-          context,
-          month: "April",
-          less30: "0.39",
-          avg: "4.21",
-          more30: "5.22",
-          rainfall: "5",
-          statusColor: AppColors.wefColor, // Wet
-        ),
-        Gap(12.h),
-        _buildRow(
-          context,
-          month: "May",
-          less30: "0.10",
-          avg: "4.17",
-          more30: "4.73",
-          rainfall: "4",
-          statusColor:
-              AppColors.wefColor, // Wet - using same color as image implies
-        ),
-        Gap(16.h),
+        ...records.map((record) {
+          Color statusColor = AppColors.normalColor;
+          if (record.condition?.toLowerCase() == "wet") {
+            statusColor = AppColors.wefColor;
+          } else if (record.condition?.toLowerCase() == "dry") {
+            statusColor = AppColors.dryColor;
+          }
+
+          return Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: _buildRow(
+              context,
+              month: record.month ?? "",
+              less30: record.less30?.toString() ?? "0.00",
+              avg: record.avg?.toString() ?? "0.00",
+              more30: record.more30?.toString() ?? "0.00",
+              rainfall: record.rainfall?.toString() ?? "0",
+              statusColor: statusColor,
+            ),
+          );
+        }),
+        Gap(4.h),
         // Legend
         Row(
           children: [

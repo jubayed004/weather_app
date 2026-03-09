@@ -1,5 +1,5 @@
 class AppStrings {
-  static const String agroClima = "agro_clima";
+  static const String agroClima = "clima_norm";
 
   static const String signIn = "sign_in";
   static const String getStarted = "get_started";

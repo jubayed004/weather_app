@@ -1,15 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as TextValidator;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
+import 'package:weather_app/features/profile/controller/profile_controller.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
+import 'package:weather_app/share/widgets/network_image/custom_network_image.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/utils/config/app_config.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -20,11 +23,14 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController _nameController;
+  final ProfileController _profileController = Get.find<ProfileController>();
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: "Iris Rodriguez");
+    _nameController = TextEditingController(
+      text: _profileController.profile.value.data?.name ?? "",
+    );
   }
 
   @override
@@ -52,24 +58,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 50.r,
-                    backgroundColor: AppColors.darkSurface,
-                    backgroundImage: const NetworkImage(
-                      "https://i.pravatar.cc/300",
-                    ),
-                  ),
+                  Obx(() {
+                    if (_profileController.selectedImage.value != null) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(50.r),
+                        child: Image.file(
+                          File(_profileController.selectedImage.value!.path),
+                          height: 100.h,
+                          width: 100.w,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    }
+                    return CustomNetworkImage(
+                      imageUrl:
+                          _profileController.profile.value.data?.avatar ??
+                          AppConfig.defaultProfile,
+                      height: 100.h,
+                      width: 100.w,
+                      borderRadius: BorderRadius.circular(50.r),
+                    );
+                  }),
                   // Overlay for edit icon
                   Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black.withOpacity(0.3),
-                      ),
-                      child: const Icon(
-                        Icons.camera_alt_outlined,
-                        color: Colors.white,
-                        size: 30,
+                    child: GestureDetector(
+                      onTap: () {
+                        _profileController.pickImage();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.black.withValues(alpha: 0.3),
+                        ),
+                        child: const Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.white,
+                          size: 30,
+                        ),
                       ),
                     ),
                   ),
@@ -95,13 +120,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(24.w),
-        child: CustomButton(
-          text: AppStrings.updateProfile.tr,
-          onTap: () {
-            // Update logic
-            context.pop();
-          },
-        ),
+        child: Obx(() {
+          return CustomButton(
+            text: AppStrings.updateProfile.tr,
+            isLoading: _profileController.updateProfileLoading.value,
+            onTap: () {
+              // Update logic
+              _profileController.updateProfile(
+                body: {"name": _nameController.text},
+              );
+            },
+          );
+        }),
       ),
     );
   }

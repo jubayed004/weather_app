@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/core/router/route_path.dart';
-import 'package:weather_app/core/router/routes.dart';
+import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
@@ -21,6 +20,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final authController = Get.find<AuthController>();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController(
     text: kDebugMode ? 'John Doe' : '',
@@ -31,6 +31,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController(
     text: kDebugMode ? 'Password00' : '',
   );
+  final TextEditingController _confirmPasswordController =
+      TextEditingController(text: kDebugMode ? 'Password00' : '');
 
   @override
   void dispose() {
@@ -75,34 +77,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   const Gap(40),
                   CustomTextField(
+                    title: AppStrings.name.tr,
                     controller: _nameController,
                     hintText: AppStrings.enterYourName.tr,
                     validator: TextFieldValidator.name(),
                   ),
                   const Gap(16),
                   CustomTextField(
+                    title: "Email".tr,
                     controller: _emailController,
                     hintText: AppStrings.enterEmailAddress.tr,
                     validator: TextFieldValidator.email(),
                   ),
                   const Gap(16),
                   CustomTextField(
+                    title: "Password".tr,
                     controller: _passwordController,
                     hintText: AppStrings.enterPassword.tr,
                     isPassword: true,
                     validator: TextFieldValidator.password(),
                   ),
+                  const Gap(16),
+                  CustomTextField(
+                    title: "Confirm Password".tr,
+                    controller: _confirmPasswordController,
+                    hintText: "Enter Confirm Password".tr,
+                    isPassword: true,
+                    validator: TextFieldValidator.password(),
+                  ),
                   const Gap(32),
-                  CustomButton(
-                    isLoading: false,
-                    onTap: () {
-                      // if (_formKey.currentState!.validate()) {
-                      //   // TODO: Implement Sign Up Logic
-                      // }
+                  Obx(
+                    () => CustomButton(
+                      isLoading: authController.signUpLoading.value,
+                      onTap: () {
+                        if (_formKey.currentState!.validate()) {
+                          authController.signUp(
+                            nameSignUp: _nameController.text.trim(),
+                            emailSignUp: _emailController.text.trim(),
+                            passwordSignUp: _passwordController.text.trim(),
+                            confirmPasswordSignUp: _confirmPasswordController
+                                .text
+                                .trim(),
+                          );
+                        }
 
-                      AppRouter.route.goNamed(RoutePath.activeOtpScreen);
-                    },
-                    text: AppStrings.signUp.tr,
+                        // AppRouter.route.goNamed(RoutePath.activeOtpScreen);
+                      },
+                      text: AppStrings.signUp.tr,
+                    ),
                   ),
                   const Gap(24),
                   Center(

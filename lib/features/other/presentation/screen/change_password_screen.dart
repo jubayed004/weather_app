@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:weather_app/core/router/routes.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
@@ -9,6 +8,7 @@ import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/features/other/controller/other_controller.dart';
 import 'package:get/get.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -25,6 +25,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController _newPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final _otherController = Get.find<OtherController>();
 
   @override
   void dispose() {
@@ -73,16 +74,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
               ),
               Gap(30.h),
-              CustomButton(
-                text: AppStrings.changePassword.tr,
-                onTap: () {
-                  // if (_formKey.currentState!.validate()) {
-                  //   // TODO: Implement change password logic
-                  //   context.pop();
-                  // }
-                  AppRouter.route.pop();
-                },
-              ),
+              Obx(() {
+                return CustomButton(
+                  text: AppStrings.changePassword.tr,
+                  isLoading: _otherController.changePasswordLoading.value,
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _otherController.changePassword(
+                        body: {
+                          "currentPassword": _previousPasswordController.text,
+                          "newPassword": _newPasswordController.text,
+                        },
+                      );
+                    }
+                  },
+                );
+              }),
             ],
           ),
         ),

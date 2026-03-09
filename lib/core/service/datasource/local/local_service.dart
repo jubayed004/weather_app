@@ -2,8 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:weather_app/utils/enum/app_enum.dart';
 import 'package:weather_app/utils/local/local_keys.dart';
 import 'package:weather_app/helper/logger/app_logger.dart';
+
 class LocalService {
-  Future<SharedPreferences> get _prefs async => await SharedPreferences.getInstance();
+  Future<SharedPreferences> get _prefs async =>
+      await SharedPreferences.getInstance();
 
   Future<String> getToken() async {
     final prefs = await _prefs;
@@ -43,15 +45,21 @@ class LocalService {
   }) async {
     try {
       final prefs = await _prefs;
-      final success = await prefs.setString(LocalKeys.token, token) &&
+      final success =
+          await prefs.setString(LocalKeys.token, token) &&
           await prefs.setString(LocalKeys.refreshToken, refreshToken) &&
           await prefs.setString(LocalKeys.userId, id) &&
           await prefs.setString(LocalKeys.role, role);
 
-      if (!success) AppLogger.log("Failed to save user data", type: AppLogType.error);
+      if (!success) {
+        AppLogger.log("Failed to save user data", type: AppLogType.error);
+      }
       return success;
     } catch (e, stack) {
-      AppLogger.log("Error saving user data: $e\n$stack", type: AppLogType.error);
+      AppLogger.log(
+        "Error saving user data: $e\n$stack",
+        type: AppLogType.error,
+      );
       return false;
     }
   }
@@ -60,7 +68,9 @@ class LocalService {
     try {
       final prefs = await _prefs;
       final success = await prefs.setString(LocalKeys.token, token);
-      if (!success) AppLogger.log("Failed to save token", type: AppLogType.error);
+      if (!success) {
+        AppLogger.log("Failed to save token", type: AppLogType.error);
+      }
       return success;
     } catch (e, stack) {
       AppLogger.log("Error saving token: $e\n$stack", type: AppLogType.error);
@@ -72,10 +82,18 @@ class LocalService {
     try {
       final prefs = await _prefs;
       final success = await prefs.setBool(LocalKeys.onboarding, isView);
-      if (!success) AppLogger.log("Failed to save onboarding status", type: AppLogType.error);
+      if (!success) {
+        AppLogger.log(
+          "Failed to save onboarding status",
+          type: AppLogType.error,
+        );
+      }
       return success;
     } catch (e, stack) {
-      AppLogger.log("Error saving onboarding status: $e\n$stack", type: AppLogType.error);
+      AppLogger.log(
+        "Error saving onboarding status: $e\n$stack",
+        type: AppLogType.error,
+      );
       return false;
     }
   }
@@ -84,10 +102,15 @@ class LocalService {
     try {
       final prefs = await _prefs;
       final success = await prefs.setString(LocalKeys.language, value);
-      if (!success) AppLogger.log("Failed to save language", type: AppLogType.error);
+      if (!success) {
+        AppLogger.log("Failed to save language", type: AppLogType.error);
+      }
       return success;
     } catch (e, stack) {
-      AppLogger.log("Error saving language: $e\n$stack", type: AppLogType.error);
+      AppLogger.log(
+        "Error saving language: $e\n$stack",
+        type: AppLogType.error,
+      );
       return false;
     }
   }
@@ -104,7 +127,12 @@ class LocalService {
       }
 
       final langSaved = await prefs.setString(LocalKeys.language, lang);
-      if (!langSaved) AppLogger.log("Language not restored after logout", type: AppLogType.warning);
+      if (!langSaved) {
+        AppLogger.log(
+          "Language not restored after logout",
+          type: AppLogType.warning,
+        );
+      }
 
       AppLogger.log("User logged out successfully", type: AppLogType.success);
       return true;

@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:weather_app/core/di/injection.dart';
 import 'package:weather_app/core/router/route_path.dart';
+import 'package:weather_app/core/router/routes.dart';
+import 'package:weather_app/core/service/datasource/local/local_service.dart';
+import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
@@ -21,11 +26,28 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController(
-    text: kDebugMode ? 'john.doe@example.com' : '',
+    text: kDebugMode ? 'jooo@yopmail.com' : '',
   );
   final TextEditingController _passwordController = TextEditingController(
-    text: kDebugMode ? 'Password00' : '',
+    text: kDebugMode ? 'Jubayed1234' : '',
   );
+  final _authController = Get.find<AuthController>();
+
+  final LocalService localService = sl();
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  Future<void> checkLoginStatus() async {
+    final token = await localService.getToken();
+    if (token.isNotEmpty && !JwtDecoder.isExpired(token)) {
+      AppRouter.route.goNamed(RoutePath.homeScreen);
+    } else {
+      AppRouter.route.goNamed(RoutePath.loginScreen);
+    }
+  }
 
   @override
   void dispose() {
@@ -84,9 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     isLoading: false,
                     onTap: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Implement Login Logic
-                        // For now, assume success and go to Home
-                        context.goNamed(RoutePath.homeScreen);
+                        _authController.signIn(
+                          email: _emailController.text,
+                          password: _passwordController.text,
+                        );
                       }
                     },
                     text: AppStrings.signIn.tr,

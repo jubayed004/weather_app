@@ -5,12 +5,15 @@ import 'package:get/get.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/features/home/controller/home_controller.dart';
 
 class ResultSummaryCard extends StatelessWidget {
   const ResultSummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final resultData = Get.find<HomeController>().resultSummaryModel.value.data;
+
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
@@ -42,7 +45,8 @@ class ResultSummaryCard extends StatelessWidget {
                   Gap(12.w),
                   // WET Text
                   Text(
-                    AppStrings.wet.tr,
+                    resultData?.determination?.toUpperCase() ??
+                        AppStrings.wet.tr,
                     style: context.headlineSmall.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -52,14 +56,14 @@ class ResultSummaryCard extends StatelessWidget {
               ),
               Gap(16.h),
               Text(
-                "${AppStrings.weightedScore.tr} (16 Out Of 18)",
+                "${AppStrings.weightedScore.tr} (${resultData?.totalScore ?? 0} Out Of ${resultData?.maxScore ?? 0})",
                 style: context.bodyMedium.copyWith(
                   color: AppColors.secondaryText,
                 ),
               ),
               Gap(4.h),
               Text(
-                "March - April 2025",
+                resultData?.period ?? "March - April 2025",
                 style: context.bodyMedium.copyWith(
                   color: AppColors.secondaryText,
                 ),

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/features/other/controller/other_controller.dart';
+import 'package:weather_app/features/profile/controller/profile_controller.dart';
 import 'package:weather_app/share/controller/language_controller.dart';
 
 void initGetx() {
@@ -27,5 +28,5 @@ void initGetx() {
   // Get.lazyPut(() => RefundController(), fenix: true);
   //
   // //Profile
-  // Get.lazyPut(() => ProfileController(), fenix: true);
+  Get.lazyPut(() => ProfileController(), fenix: true);
 }

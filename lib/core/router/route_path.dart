@@ -11,6 +11,7 @@ class RoutePath {
   static const String resetPasswordScreen = 'resetPasswordScreen';
   static const String welcomeBackScreen = 'welcomeBackScreen';
   static const String homeScreen = 'homeScreen';
+  static const String quickSearchScreen = 'quickSearchScreen';
   static const String resultScreen = 'resultScreen';
   static const String resultSummaryScreen = 'resultSummaryScreen';
   static const String saveScreen = 'saveScreen';

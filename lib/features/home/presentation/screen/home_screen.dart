@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_app/core/router/route_path.dart';
 import 'package:weather_app/helper/date_converter/date_converter.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
@@ -12,6 +11,11 @@ import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/features/home/controller/home_controller.dart';
+import 'package:weather_app/features/home/model/state_model.dart'
+    as state_model;
+import 'package:weather_app/features/home/model/counties_model.dart'
+    as counties_model;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,15 +25,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Mock Data
-  final List<String> states = ['California', 'Texas', 'Florida', 'New York'];
-  final List<String> counties = ['County A', 'County B', 'County C'];
+  final HomeController _homeController = Get.put(HomeController());
 
-  final ValueNotifier<String?> selectedState = ValueNotifier<String?>(null);
-  final ValueNotifier<String?> selectedCounty = ValueNotifier<String?>(null);
+  final ValueNotifier<state_model.StateModelDatum?> selectedState =
+      ValueNotifier<state_model.StateModelDatum?>(null);
+  final ValueNotifier<counties_model.Datum?> selectedCounty =
+      ValueNotifier<counties_model.Datum?>(null);
   final ValueNotifier<String?> selectedDate = ValueNotifier<String?>(null);
   final TextEditingController _fipsController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _homeController.getStates();
+  }
 
   @override
   void dispose() {
@@ -40,43 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2101),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.dark(
-              primary: AppColors.successColor,
-              onPrimary: Colors.white,
-              surface: AppColors.darkSurface,
-              onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: AppColors.darkSurface,
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() {
-        _dateController.text = DateConverter.formatDate(
-          dateTime: picked,
-          format: 'yyyy-MM-dd',
-        );
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             children: [
@@ -113,61 +92,76 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     /// ---------- STATE DROPDOWN ----------
-                    ValueListenableBuilder<String?>(
-                      valueListenable: selectedState,
-                      builder: (context, value, child) {
-                        return CustomDropdownField<String>(
-                          hintText: AppStrings.selectState.tr,
-                          items: states,
-                          value: value,
-                          onChanged: (newValue) {
-                            selectedState.value = newValue;
-                          },
-                          fillColor: AppColors.darkBackground,
-                          labelBuilder: (item) => item,
-                        );
-                      },
-                    ),
+                    Obx(() {
+                      final states =
+                          _homeController.stateModel.value.data ?? [];
+                      return ValueListenableBuilder<
+                        state_model.StateModelDatum?
+                      >(
+                        valueListenable: selectedState,
+                        builder: (context, value, child) {
+                          return CustomDropdownField<
+                            state_model.StateModelDatum
+                          >(
+                            hintText: AppStrings.selectState.tr,
+                            items: states,
+                            value: value,
+                            onChanged: (newValue) {
+                              selectedState.value = newValue;
+                              selectedCounty.value = null; // cascade clearing
+                              if (newValue?.code != null) {
+                                _homeController.getCounties(
+                                  stateCode: newValue!.code!,
+                                );
+                              }
+                            },
+                            fillColor: AppColors.darkBackground,
+                            labelBuilder: (item) => item.code ?? '',
+                          );
+                        },
+                      );
+                    }),
                     Gap(16.h),
 
                     /// ---------- COUNTY DROPDOWN ----------
-                    ValueListenableBuilder<String?>(
-                      valueListenable: selectedCounty,
-                      builder: (context, value, child) {
-                        return CustomDropdownField<String>(
-                          hintText: AppStrings.selectCounty.tr,
-                          items: counties,
-                          value: value,
-                          onChanged: (newValue) {
-                            selectedCounty.value = newValue;
-                          },
-                          fillColor: AppColors.darkBackground,
-                          labelBuilder: (item) => item,
-                        );
-                      },
-                    ),
+                    Obx(() {
+                      final counties =
+                          _homeController.countiesModel.value.data ?? [];
+                      return ValueListenableBuilder<counties_model.Datum?>(
+                        valueListenable: selectedCounty,
+                        builder: (context, value, child) {
+                          return CustomDropdownField<counties_model.Datum>(
+                            hintText: AppStrings.selectCounty.tr,
+                            items: counties,
+                            value: value,
+                            onChanged: (newValue) {
+                              selectedCounty.value = newValue;
+                              if (newValue?.fips != null) {
+                                _fipsController.text = newValue!.fips!;
+                              } else {
+                                _fipsController.clear();
+                              }
+                            },
+                            fillColor: AppColors.darkBackground,
+                            labelBuilder: (item) => item.name ?? '',
+                          );
+                        },
+                      );
+                    }),
                     Gap(16.h),
-                    // ValueListenableBuilder<String?>(
-                    //   valueListenable: selectedDate,
-                    //   builder: (context, value, child) {
-                    //     return CustomDropdownField<String>(
-                    //       hintText: "Observation Date",
-                    //       items: observationDates,
-                    //       value: value,
-                    //       onChanged: (newValue) {
-                    //         selectedDate.value = newValue;
-                    //       },
-                    //       fillColor: AppColors.darkBackground,
-                    //       labelBuilder: (item) => item,
-                    //     );
-                    //   },
-                    // ),
                     CustomTextField(
                       controller: _dateController,
                       hintText: "Observation Date",
                       fillColor: AppColors.darkBackground,
                       readOnly: true,
-                      onTap: () => _selectDate(context),
+                      onTap: () async {
+                        final formattedDate = await DateConverter.selectDate(
+                          context,
+                        );
+                        if (formattedDate != null) {
+                          _dateController.text = formattedDate;
+                        }
+                      },
                       suffixIcon: const Icon(
                         Icons.calendar_today_outlined,
                         color: AppColors.white,
@@ -217,25 +211,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     // ),
                     CustomTextField(
                       controller: _fipsController,
-                      hintText: AppStrings.fipsId.tr,
-
+                      hintText: "${AppStrings.fipsId.tr} (Optional)",
                       fillColor: AppColors.darkBackground,
                     ),
                     Gap(24.h),
 
                     /// ---------- SEARCH BUTTON ----------
-                    CustomButton(
-                      text: AppStrings.search.tr,
-                      isLoading: false,
-                      onTap: () {
-                        context.pushNamed(RoutePath.resultScreen);
-                      },
+                    Obx(
+                      () => CustomButton(
+                        text: AppStrings.search.tr,
+                        isLoading:
+                            _homeController.calculateByLocationLoading.value,
+                        onTap: () {
+                          _homeController.calculateByLocation(
+                            body: {
+                              "state": selectedState.value?.code,
+                              "county": selectedCounty.value?.name,
+                              "countyFips": _fipsController.text,
+                              "observationDate": _dateController.text,
+                            },
+                          );
+                          // context.pushNamed(RoutePath.resultScreen);
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
 
-              const Spacer(),
+              Gap(24.h),
 
               /// ---------- CLIMATE REF PERIOD ----------
               Text(
@@ -255,7 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              context.pushNamed(RoutePath.quickSearchScreen);
+            },
             backgroundColor: const Color(0xFF1C1C1E), // Dark surface
             shape: const CircleBorder(
               side: BorderSide(color: Color(0xFF2C2C2E)),

@@ -13,7 +13,8 @@ import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
 
 class ActiveOtpScreen extends StatefulWidget {
-  const ActiveOtpScreen({super.key});
+  final String email;
+  const ActiveOtpScreen({super.key, required this.email});
 
   @override
   State<ActiveOtpScreen> createState() => _ActiveOtpScreenState();
@@ -21,10 +22,8 @@ class ActiveOtpScreen extends StatefulWidget {
 
 class _ActiveOtpScreenState extends State<ActiveOtpScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController verifyOtp = TextEditingController();
-  final AuthController _auth = Get.put(
-    AuthController(),
-  ); // Ensure controller is available
+  final TextEditingController verifyOtp = .new();
+  final _authController = Get.find<AuthController>();
 
   @override
   void dispose() {
@@ -89,16 +88,20 @@ class _ActiveOtpScreenState extends State<ActiveOtpScreen> {
                 Gap(28.h),
 
                 /// ---------- CONFIRM BUTTON ----------
-                CustomButton(
-                  text: AppStrings.continueText.tr,
-                  isLoading: false,
-                  onTap: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   // TODO: Implement Verification Logic
-                    //   print("OTP Verified: ${verifyOtp.text}");
-                    // }
-                    context.goNamed(RoutePath.homeScreen);
-                  },
+                Obx(
+                  () => CustomButton(
+                    text: AppStrings.continueText.tr,
+                    isLoading: _authController.activeOtpLoading.value,
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        _authController.activeOtp(
+                          email: widget.email,
+                          otp: verifyOtp.text,
+                        );
+                        print("OTP Verified: ${verifyOtp.text}");
+                      }
+                    },
+                  ),
                 ),
                 Gap(28.h),
 
@@ -116,10 +119,10 @@ class _ActiveOtpScreenState extends State<ActiveOtpScreen> {
 
                     ///  ---------- RESEND WITH TIMER UI ----------
                     Obx(
-                      () => _auth.isResendEnabled.value
+                      () => _authController.isResendEnabled.value
                           ? GestureDetector(
                               onTap: () {
-                                _auth.resendCode();
+                                _authController.resendCode();
                               },
                               child: Text(
                                 AppStrings.resendOtp.tr,
@@ -130,7 +133,7 @@ class _ActiveOtpScreenState extends State<ActiveOtpScreen> {
                               ),
                             )
                           : Text(
-                              "Resend code in 00:${_auth.start.value.toString().padLeft(2, '0')}s",
+                              "Resend code in 00:${_authController.start.value.toString().padLeft(2, '0')}s",
                               style: context.titleSmall.copyWith(
                                 color: AppColors.secondaryText,
                               ),

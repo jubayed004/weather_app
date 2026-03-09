@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/core/router/route_path.dart';
-import 'package:weather_app/core/router/routes.dart';
+import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
@@ -21,6 +20,7 @@ class ForgetPasswordScreen extends StatefulWidget {
 class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
+  final AuthController _authController = Get.find<AuthController>();
 
   @override
   void dispose() {
@@ -82,17 +82,20 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                 Gap(24.h),
 
                 /// ---------- SUBMIT BUTTON ----------
-                CustomButton(
-                  text: AppStrings.sendConfirmation.tr,
-                  isLoading: false,
-                  onTap: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   // Navigate to Active OTP Screen
-                    //   AppRouter.route.pushNamed(RoutePath.activeOtpScreen);
-                    // }
+                Obx(
+                  () => CustomButton(
+                    text: AppStrings.sendConfirmation.tr,
+                    isLoading: _authController.forgotPasswordLoading.value,
+                    onTap: () {
+                      if (_formKey.currentState!.validate()) {
+                        _authController.forgotPassword(
+                          email: _emailController.text,
+                        );
+                      }
 
-                    AppRouter.route.pushNamed(RoutePath.forgetOtpScreen);
-                  },
+                      //AppRouter.route.pushNamed(RoutePath.forgetOtpScreen);
+                    },
+                  ),
                 ),
               ],
             ),

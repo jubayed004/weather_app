@@ -5,12 +5,19 @@ import 'package:get/get.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
+import 'package:weather_app/features/home/controller/home_controller.dart';
 
 class AdditionalInfoWidget extends StatelessWidget {
   const AdditionalInfoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final info = Get.find<HomeController>()
+        .resultSummaryModel
+        .value
+        .data
+        ?.additionalInfo;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,27 +41,26 @@ class AdditionalInfoWidget extends StatelessWidget {
               _buildInfoRow(
                 context,
                 icon: Icons.cell_tower,
-                text: "WETS Station: Altadena",
+                text: "WETS Station: ${info?.wetsStation ?? 'N/A'}",
               ),
               Gap(12.h),
               _buildInfoRow(
                 context,
                 icon: Icons.location_on_outlined,
-                text: "Location: Los Angeles, Altadena",
+                text: "Location: ${info?.location ?? 'N/A'}",
               ),
               Gap(12.h),
               _buildInfoRow(
                 context,
                 icon: Icons.layers_outlined,
-                text:
-                    "Soil Map Unit: Kullit-Addielou complex, 1 to 3 percent slope",
+                text: "Soil Map Unit: ${info?.soilMapUnit ?? 'N/A'}",
               ),
               Gap(12.h),
               _buildInfoRow(
                 context,
                 icon: Icons.eco_outlined,
                 text:
-                    "Growing Season (50% > 28°F)\nMarch 4 - November 26 267 days",
+                    "Growing Season (${info?.growingSeasonThreshold ?? '50% > 28°F'})\n${info?.growingSeason ?? 'N/A'}",
               ),
             ],
           ),

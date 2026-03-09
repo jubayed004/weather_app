@@ -20,6 +20,11 @@ class AppColors {
   static const Color normalColor = Color(0xFF617B0B);
   static const Color wefColor = Color(0xFF0D7B92);
 
+  static const Color success = Color(0xFF28A745);
+  static const Color error = Color(0xFFDC3545);
+  static const Color warning = Color(0xFFFFC107);
+  static const Color info = Color(0xFF17A2B8);
+
   // Dark Theme Colors
   static const Color darkBackground = Color(0xFF101010);
   static const Color darkPrimary = Color(0xFF34C759);

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
 import 'package:weather_app/utils/app_strings/app_strings.dart';
 import 'package:weather_app/utils/color/app_colors.dart';
+import 'package:weather_app/features/other/controller/other_controller.dart';
 import 'package:get/get.dart';
 
 class ContactAndSupportScreen extends StatefulWidget {
@@ -22,6 +22,7 @@ class _ContactAndSupportScreenState extends State<ContactAndSupportScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
+  final _otherController = Get.find<OtherController>();
 
   @override
   void dispose() {
@@ -66,15 +67,22 @@ class _ContactAndSupportScreenState extends State<ContactAndSupportScreen> {
                 validator: TextFieldValidator.description(),
               ),
               Gap(30.h),
-              CustomButton(
-                text: "Submit", // Using "Submit" as discussed
-                onTap: () {
-                  // if (_formKey.currentState!.validate()) {
-                  //   // TODO: Implement contact support logic
-
-                  // }
-                  context.pop();
-                },
+              Obx(
+                () => CustomButton(
+                  text: "Submit".tr,
+                  isLoading: _otherController.faqLoading.value,
+                  onTap: () {
+                    if (_formKey.currentState!.validate()) {
+                      _otherController.contact(
+                        body: {
+                          "name": _nameController.text,
+                          "email": _emailController.text,
+                          "message": _messageController.text,
+                        },
+                      );
+                    }
+                  },
+                ),
               ),
             ],
           ),

@@ -9,6 +9,7 @@ import 'package:weather_app/features/auth/presentation/screen/forget_password_sc
 import 'package:weather_app/features/auth/presentation/screen/reset_password_screen.dart';
 import 'package:weather_app/features/auth/presentation/screen/welcome_back_screen.dart';
 import 'package:weather_app/features/home/presentation/screen/home_screen.dart';
+import 'package:weather_app/features/quick_search/presentation/screen/quick_search_screen.dart';
 import 'package:weather_app/features/other/presentation/screen/change_password_screen.dart';
 import 'package:weather_app/features/other/presentation/screen/contact_and_support.dart';
 import 'package:weather_app/features/other/presentation/screen/privacy_policy_screen.dart';
@@ -66,8 +67,12 @@ class AppRouter {
         name: RoutePath.activeOtpScreen,
         path: RoutePath.activeOtpScreen.addBasePath,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final map = (extra is Map<String, dynamic>) ? extra : {};
+
+          final email = map['email'] as String?;
           return _buildPageWithAnimation(
-            child: const ActiveOtpScreen(),
+            child: ActiveOtpScreen(email: email ?? ""),
             state: state,
           );
         },
@@ -126,11 +131,27 @@ class AppRouter {
         },
       ),
       GoRoute(
+        name: RoutePath.quickSearchScreen,
+        path: RoutePath.quickSearchScreen.addBasePath,
+        pageBuilder: (context, state) {
+          return _buildPageWithAnimation(
+            child: const QuickSearchScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
         name: RoutePath.resultScreen,
         path: RoutePath.resultScreen.addBasePath,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final map = (extra is Map<String, dynamic>) ? extra : {};
+
+          final latitude = map['latitude'] as double?;
+          final longitude = map['longitude'] as double?;
+
           return _buildPageWithAnimation(
-            child: const ResultScreen(),
+            child: ResultScreen(latitude: latitude, longitude: longitude),
             state: state,
           );
         },
