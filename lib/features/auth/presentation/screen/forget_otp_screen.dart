@@ -13,7 +13,8 @@ import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
 
 class ForgetOtpScreen extends StatefulWidget {
-  const ForgetOtpScreen({super.key});
+  final String email;
+  const ForgetOtpScreen({super.key, required this.email});
 
   @override
   State<ForgetOtpScreen> createState() => _ForgetOtpScreenState();
@@ -98,7 +99,10 @@ class _ForgetOtpScreenState extends State<ForgetOtpScreen> {
                     //   print("OTP Verified: ${verifyOtp.text}");
                     // }
 
-                    AppRouter.route.pushNamed(RoutePath.resetPasswordScreen);
+                    AppRouter.route.pushNamed(
+                      RoutePath.resetPasswordScreen,
+                      extra: {"email": widget.email, "otp": verifyOtp.text},
+                    );
                   },
                 ),
                 Gap(28.h),

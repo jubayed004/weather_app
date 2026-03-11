@@ -241,11 +241,7 @@ class AuthController extends GetxController {
               response.data?["message"].toString() ??
               "Forgot Password Successful",
         );
-        // final body = {
-        //   "email": email,
-        //   "otp": false,
-        // };
-        AppRouter.route.goNamed(RoutePath.activeOtpScreen, extra: body);
+        AppRouter.route.goNamed(RoutePath.forgetOtpScreen, extra: email);
       } else {
         forgotPasswordLoadingMethod(false);
         AppToast.error(
@@ -310,21 +306,15 @@ class AuthController extends GetxController {
   final resetPasswordLoading = false.obs;
   bool resetPasswordLoadingMethod(bool status) =>
       resetPasswordLoading.value = status;
-  Future<void> resetPassword({
-    required String password,
-    required String token,
-  }) async {
+  Future<void> resetPassword({required Map<String, dynamic> body}) async {
     try {
       resetPasswordLoadingMethod(true);
-
-      final body = {"new_password": password.trim()};
 
       AppConfig.logger.i(body);
 
       final response = await apiClient.post(
         url: ApiUrls.resetPassword(),
         body: body,
-        token: token,
       );
 
       AppConfig.logger.i(response.data);

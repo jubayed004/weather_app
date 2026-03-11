@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     text: kDebugMode ? 'jooo@yopmail.com' : '',
   );
   final TextEditingController _passwordController = TextEditingController(
-    text: kDebugMode ? 'Jubayed1234' : '',
+    text: kDebugMode ? 'Jubo1234' : '',
   );
   final _authController = Get.find<AuthController>();
 
@@ -102,17 +102,19 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: TextFieldValidator.password(),
                   ),
                   const Gap(32),
-                  CustomButton(
-                    isLoading: false,
-                    onTap: () async {
-                      if (_formKey.currentState!.validate()) {
-                        _authController.signIn(
-                          email: _emailController.text,
-                          password: _passwordController.text,
-                        );
-                      }
-                    },
-                    text: AppStrings.signIn.tr,
+                  Obx(
+                    () => CustomButton(
+                      isLoading: _authController.signInLoading.value,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          _authController.signIn(
+                            email: _emailController.text,
+                            password: _passwordController.text,
+                          );
+                        }
+                      },
+                      text: AppStrings.signIn.tr,
+                    ),
                   ),
                   const Gap(8),
                   Align(

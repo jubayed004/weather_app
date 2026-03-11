@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:weather_app/core/router/route_path.dart';
+import 'package:weather_app/features/auth/controller/auth_controller.dart';
 import 'package:weather_app/helper/validator/text_field_validator.dart';
 import 'package:weather_app/share/widgets/button/custom_button.dart';
 import 'package:weather_app/share/widgets/text_field/custom_text_field.dart';
@@ -12,7 +13,13 @@ import 'package:weather_app/utils/color/app_colors.dart';
 import 'package:weather_app/utils/extension/base_extension.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({super.key});
+  final String email;
+  final String otp;
+  const ResetPasswordScreen({
+    super.key,
+    required this.email,
+    required this.otp,
+  });
 
   @override
   State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
@@ -23,7 +30,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-
+  final _authController = Get.find<AuthController>();
   @override
   void dispose() {
     _passwordController.dispose();
@@ -98,17 +105,22 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 Gap(24.h),
 
                 /// ---------- SUBMIT BUTTON ----------
-                CustomButton(
-                  text: AppStrings.changePassword.tr,
-                  isLoading: false,
-                  onTap: () {
-                    // if (_formKey.currentState!.validate()) {
-                    //   // Navigate back to Login or Success Screen
-                    //   // For now, let's go back to Login or show success
-
-                    // }
-                    context.goNamed(RoutePath.welcomeBackScreen);
-                  },
+                Obx(
+                  () => CustomButton(
+                    text: AppStrings.changePassword.tr,
+                    isLoading: _authController.resetPasswordLoading.value,
+                    onTap: () {
+                      final body = {
+                        "email": widget.email,
+                        "otp": widget.otp,
+                        "newPassword": _passwordController.text,
+                      };
+                      if (_formKey.currentState!.validate()) {
+                        _authController.resetPassword(body: body);
+                      }
+                      // context.goNamed(RoutePath.welcomeBackScreen);
+                    },
+                  ),
                 ),
               ],
             ),

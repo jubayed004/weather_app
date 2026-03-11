@@ -92,8 +92,10 @@ class AppRouter {
         name: RoutePath.forgetOtpScreen,
         path: RoutePath.forgetOtpScreen.addBasePath,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final email = extra as String?;
           return _buildPageWithAnimation(
-            child: const ForgetOtpScreen(),
+            child: ForgetOtpScreen(email: email ?? ""),
             state: state,
           );
         },
@@ -103,8 +105,13 @@ class AppRouter {
         name: RoutePath.resetPasswordScreen,
         path: RoutePath.resetPasswordScreen.addBasePath,
         pageBuilder: (context, state) {
+          final extra = state.extra;
+          final map = (extra is Map<String, dynamic>) ? extra : {};
+
+          final email = map['email'] as String?;
+          final otp = map['otp'] as String?;
           return _buildPageWithAnimation(
-            child: const ResetPasswordScreen(),
+            child: ResetPasswordScreen(email: email ?? "", otp: otp ?? ""),
             state: state,
           );
         },

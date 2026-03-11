@@ -55,8 +55,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.darkBackground,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: RefreshIndicator(
+          color: AppColors.successColor,
+          backgroundColor: const Color(0xFF1C1C1E),
+          onRefresh: () async {
+            selectedState.value = null;
+            selectedCounty.value = null;
+            selectedDate.value = null;
+            _fipsController.clear();
+            _dateController.clear();
+            await _homeController.getStates();
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             children: [
               Align(
@@ -251,6 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Gap(20.h),
             ],
           ),
+        ),
         ),
       ),
 

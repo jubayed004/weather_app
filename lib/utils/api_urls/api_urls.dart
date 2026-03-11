@@ -31,4 +31,5 @@ class ApiUrls {
   static String reverseGeocode() => '$base/stations/reverse-geocode';
   static String saveStations() => '$base/evaluations/save';
   static String calculate() => '$base/evaluations/calculate';
+  static String getSavedStations() => '$base/evaluations/saved';
 }

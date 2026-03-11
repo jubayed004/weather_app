@@ -25,7 +25,10 @@ class ResultSummaryController extends GetxController {
       resultSummaryModel.value = ResultSummaryModel.fromJson(response.data);
       saveStationsLoading.value = false;
       AppToast.success(message: response.data['message']);
-      AppRouter.route.pushNamed(RoutePath.saveScreen);
+      AppRouter.route.pushNamed(
+        RoutePath.saveScreen,
+        extra: resultSummaryModel,
+      );
     } else {
       AppConfig.logger.e(response.data);
       AppToast.error(message: response.data['message']);
