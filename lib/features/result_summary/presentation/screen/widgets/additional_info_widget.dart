@@ -12,11 +12,9 @@ class AdditionalInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final info = Get.find<HomeController>()
-        .resultSummaryModel
-        .value
-        .data
-        ?.additionalInfo;
+    final data = Get.find<HomeController>().resultSummaryModel.value.data;
+    final info = data?.additionalInfo;
+    final station = data?.station;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,6 +40,25 @@ class AdditionalInfoWidget extends StatelessWidget {
                 context,
                 icon: Icons.cell_tower,
                 text: "WETS Station: ${info?.wetsStation ?? 'N/A'}",
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "This is the closest station to site with all data",
+                      style: context.bodySmall.copyWith(
+                        color: AppColors.secondaryText,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                    Text(
+                      "${_formatDistance(station?.distance)} miles from site",
+                      style: context.bodySmall.copyWith(
+                        color: AppColors.secondaryText,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Gap(12.h),
               _buildInfoRow(
@@ -73,6 +90,7 @@ class AdditionalInfoWidget extends StatelessWidget {
     BuildContext context, {
     required IconData icon,
     required String text,
+    Widget? subtitle,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,15 +98,34 @@ class AdditionalInfoWidget extends StatelessWidget {
         Icon(icon, color: AppColors.successColor, size: 20.sp),
         Gap(12.w),
         Expanded(
-          child: Text(
-            text,
-            style: context.bodyMedium.copyWith(
-              color: AppColors.secondaryText,
-              height: 1.4,
-            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                text,
+                style: context.bodyMedium.copyWith(
+                  color: AppColors.secondaryText,
+                  height: 1.4,
+                ),
+              ),
+              if (subtitle != null) ...[
+                Gap(4.h), // Add spacing
+                subtitle,
+              ],
+            ],
           ),
         ),
       ],
     );
+  }
+
+  String _formatDistance(dynamic distance) {
+    if (distance == null) return '_____';
+    if (distance is num) return distance.toStringAsFixed(1);
+    if (distance is String) {
+      final parsed = double.tryParse(distance);
+      return parsed != null ? parsed.toStringAsFixed(1) : distance;
+    }
+    return '_____';
   }
 }
